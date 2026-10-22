@@ -170,3 +170,37 @@ export function respostasLegiveis(r) {
     return `${p.n}. ${p.texto}\n   → ${resp}`;
   }).join('\n');
 }
+
+// Resumo por regras, sem IA e sem custo: sempre gravado (coluna resumo_regra). Quando a chave da
+// IA está cadastrada, o parecer da IA vem além deste resumo.
+const ESTADO_CIVIL = { solteira: 'solteira', casada: 'casada', uniao_estavel: 'em união estável', divorciada: 'divorciada', viuva: 'viúva', outro: 'estado civil "outro"' };
+const BENEF = { bpc: 'BPC/LOAS', bolsa_familia: 'Bolsa Família', outro: 'outro benefício', nenhum: 'nenhum benefício' };
+const minus = (s) => (s ? s.charAt(0).toLowerCase() + s.slice(1) : s);
+
+export function resumoRegra(d, r, p) {
+  const rot = (q) => minus(PERGUNTAS[q].rotulos[r[q]]);
+  const partes = [];
+  const quem = [
+    d.idade ? `${d.idade} anos` : null,
+    d.estado_civil ? ESTADO_CIVIL[d.estado_civil] : null,
+    d.filhos != null ? `${d.filhos} filho(s)` : null,
+    d.cidade ? `de ${d.cidade}${d.bairro ? ` (${d.bairro})` : ''}` : null,
+  ].filter(Boolean).join(', ');
+  partes.push(`Mãe${quem ? `, ${quem}` : ''}.`);
+  if (d.beneficios && d.beneficios.length) partes.push(`Benefícios: ${d.beneficios.map((b) => BENEF[b]).join(', ')}.`);
+  partes.push(`Filho(a)${d.filho_idade != null ? ` de ${d.filho_idade} anos` : ''}: ${rot('q1')}; precisa de ${rot('q2')} no dia a dia; terapias: ${rot('q3')}. Sobre autismo, a mãe respondeu: "${PERGUNTAS.q4.rotulos[r.q4]}".` +
+    (p.pontos.q5 > 0 ? ` Há mais dependentes com deficiência em casa (${rot('q5')}).` : ''));
+  partes.push(`Rede de apoio: ${rot('q6')}. Renda: ${rot('q7')}. Trabalho: ${rot('q8')}. Falta do básico: ${rot('q9')}. Exclusão/julgamento: ${rot('q10')}.`);
+  const emoc = [];
+  if (p.phq2 >= 3) emoc.push(`sinais de depressão (PHQ-2 = ${p.phq2})`);
+  if (p.gad2 >= 3) emoc.push(`sinais de ansiedade (GAD-2 = ${p.gad2})`);
+  if (p.pontos.q15 >= 2) emoc.push(`esgotamento (${rot('q15')})`);
+  if (p.pontos.q16 >= 2) emoc.push(`sono ruim (${rot('q16')})`);
+  partes.push(`Últimas 2 semanas: ${emoc.length ? emoc.join('; ') : 'sem sinais emocionais fortes'}. Acompanhamento: ${rot('q18')}.`);
+  if (p.alertaRisco) partes.push(`ALERTA: relatou pensamentos de morte ou de se machucar (${rot('q17')}). Contato em até 24 horas.`);
+  partes.push(`Fé: ${rot('q19')}.`);
+  const pedidos = r.q20.map((v) => minus(PERGUNTAS.q20.rotulos[v]));
+  partes.push(`Pede ajuda em: ${pedidos.length ? pedidos.join(', ') : 'nenhuma área marcada'}.`);
+  partes.push(`Prioridade: ${PRIORIDADE_ROTULO[p.prioridade]} (pontuação ${p.total}/100).`);
+  return partes.join(' ');
+}

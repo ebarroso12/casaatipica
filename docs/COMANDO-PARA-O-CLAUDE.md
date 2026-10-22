@@ -27,15 +27,24 @@ Fale com o usuário em português do Brasil, linguagem de leigo.
   recalcula os pontos, grava e, em segundo plano, pede ao Claude (`claude-opus-5-5`, saída em JSON) o parecer:
   resumo, perfil, prioridade, áreas, CIDs a investigar, encaminhamentos. A IA só **sobe** a prioridade.
   Nome, WhatsApp e e-mail **não** vão para a IA.
-- Segredo necessário: `ANTHROPIC_API_KEY` em Supabase → Edge Functions → Secrets. Sem ele, grava com `parecer_status = sem_chave`.
+- Sempre grava um **resumo por regras** (`resumo_regra`, grátis). A IA é opcional e paga (centavos por triagem):
+  só roda com `ANTHROPIC_API_KEY` em Supabase → Edge Functions → Secrets. Sem a chave: `parecer_status = sem_chave`.
+  **O usuário não quer gastar**: não cadastrar a chave nem criar nada pago sem ele pedir.
 - Publicar a função de novo: `deploy_edge_function` com `index.ts` **e** `pontuacao.js` (os dois arquivos completos).
 
-## Banco (Supabase · crmclinica)
-- Tabela `public.casaatipica_triagens` (SQL em `sql/triagens.sql`). RLS ligado, sem política: a chave pública não lê nem grava.
-- Visão `public.casaatipica_fila`: fila por prioridade (P1 → P4), com resumo e CIDs.
-- Ver: https://supabase.com/dashboard/project/umvpwqqjzpxwuxdnnxzy/editor → `casaatipica_fila` (ou a tabela; clique duplo abre a linha).
+## Banco (Supabase · crmclinica, espaço separado `casa_atipica`, sem custo extra)
+- Nada de projeto novo no Supabase (custa US$ 10/mês; o usuário recusou). Tudo fica no crmclinica, no schema
+  `casa_atipica`, separado das tabelas da clínica e **fora da API**: a função grava por conexão direta (`SUPABASE_DB_URL`).
+- SQL completo: `sql/casa_atipica.sql`.
+- `casa_atipica.triagem`: cada triagem (respostas, pontos, prioridade, CIDs, resumo, parecer da IA opcional).
+- `casa_atipica.paciente`: as mães. `situacao` = `fila_espera` | `ativo` | `inativo` (inativo exige `motivo_inativo`).
+  A triagem cria a paciente na fila sozinha (gatilho); nova triagem da mesma mãe (mesmo WhatsApp) atualiza, não duplica.
+  Início e fim do acolhimento são preenchidos sozinhos ao mudar a situação.
+- Listas: `casa_atipica.fila_espera` (posição por prioridade e tempo de espera), `pacientes_ativos`, `pacientes_inativos`.
+- Ver: https://supabase.com/dashboard/project/umvpwqqjzpxwuxdnnxzy/editor → seletor de schema (onde aparece "public")
+  → **casa_atipica**. Mudar a situação: tabela `paciente`, clique duplo na célula `situacao`.
 - Dados de saúde = sensíveis (LGPD art. 11): consentimento geral + de saúde obrigatórios (o banco recusa sem eles). Restrinja quem acessa o projeto (Settings → Team), porque ele é o mesmo da clínica.
-- `delete` pelo execute_sql trava: peça ao usuário para apagar testes no Table Editor.
+- Apagar teste pelo execute_sql funcionou (22/10/2026) com `delete ... where whatsapp = ... and nome = ...`.
 
 ## Montar, testar e publicar
 ```bash

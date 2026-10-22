@@ -1,24 +1,27 @@
 // Casa Atípica — função `triagem` (Supabase Edge Function).
 //
 // Recebe a triagem enviada pela página triagem/index.html, recalcula a pontuação no servidor
-// (pontuacao.js), grava em public.casaatipica_triagens e, em segundo plano, pede ao Claude o
+// (pontuacao.js), grava em casa_atipica.triagem e, em segundo plano, pede ao Claude o
 // parecer para a equipe: resumo, classificação, prioridade e CIDs a investigar.
 //
+// Banco: projeto crmclinica, schema separado `casa_atipica` (tabela `triagem`, visão `fila`).
+// O schema não é exposto na API; a função grava por conexão direta (SUPABASE_DB_URL).
+//
 // A mãe recebe só o protocolo. Nome, WhatsApp e e-mail NÃO vão para a IA.
-// Segredos (Edge Functions → Secrets): ANTHROPIC_API_KEY. SUPABASE_URL e
-// SUPABASE_SERVICE_ROLE_KEY já existem em toda função do Supabase.
+// Segredos (Edge Functions → Secrets): ANTHROPIC_API_KEY. SUPABASE_DB_URL já existe em toda
+// função do Supabase.
 import Anthropic from "npm:@anthropic-ai/sdk";
-import { createClient } from "npm:@supabase/supabase-js@2";
+import postgres from "npm:postgres@3";
 import {
   maiorPrioridade,
   PERGUNTAS,
   pontuar,
   PRIORIDADE_ROTULO,
   respostasLegiveis,
+  resumoRegra,
   validarRespostas,
 } from "./pontuacao.js";
 
-const TABELA = "casaatipica_triagens";
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-client-info",
@@ -27,9 +30,10 @@ const CORS = {
 const json = (corpo: unknown, status = 200) =>
   new Response(JSON.stringify(corpo), { status, headers: { ...CORS, "Content-Type": "application/json" } });
 
-const banco = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, {
-  auth: { persistSession: false },
-});
+const sql = postgres(Deno.env.get("SUPABASE_DB_URL")!, { prepare: false, max: 2 });
+const JSONB = ["respostas", "pontos", "cids_regra", "parecer_ia"];
+const paraBanco = (o: Record<string, unknown>) =>
+  Object.fromEntries(Object.entries(o).map(([k, v]) => [k, JSONB.includes(k) && v != null ? sql.json(v as never) : v]));
 
 const texto = (v: unknown, max: number) => {
   if (typeof v !== "string") return null;
@@ -97,6 +101,7 @@ Deno.serve(async (req) => {
     prioridade_regra: p.prioridade,
     motivos_regra: p.motivos,
     cids_regra: p.cids,
+    resumo_regra: "",
     prioridade_final: p.prioridade,
     parecer_status: Deno.env.get("ANTHROPIC_API_KEY") ? "pendente" : "sem_chave",
     consentimento: true,
@@ -104,9 +109,13 @@ Deno.serve(async (req) => {
     origem: texto(d.origem, 60),
   };
 
-  const { data, error } = await banco.from(TABELA).insert(linha).select("id, protocolo").single();
-  if (error) {
-    console.error("insert", error);
+  linha.resumo_regra = resumoRegra(linha, r, p);
+
+  let data: { id: string; protocolo: string };
+  try {
+    [data] = await sql`insert into casa_atipica.triagem ${sql(paraBanco(linha) as never)} returning id, protocolo` as unknown as [{ id: string; protocolo: string }];
+  } catch (e) {
+    console.error("insert", e);
     return json({ erro: "não foi possível salvar" }, 500);
   }
 
@@ -225,18 +234,18 @@ async function gerarParecer(id: string, linha: Linha, p: ReturnType<typeof pontu
 
     // A IA pode subir a prioridade, nunca baixar a da regra (o alerta de risco é sempre urgente).
     const final = maiorPrioridade(parecer.prioridade, p.prioridade);
-    await banco.from(TABELA).update({
+    await sql`update casa_atipica.triagem set ${sql(paraBanco({
       parecer_status: "ok",
       parecer_ia: { ...parecer, modelo: resp.model, gerado_em: new Date().toISOString() },
       resumo_ia: parecer.resumo,
       prioridade_ia: parecer.prioridade,
       prioridade_final: final,
-    }).eq("id", id);
+    }) as never)} where id = ${id}`;
   } catch (e) {
     console.error("parecer", e);
-    await banco.from(TABELA).update({
+    await sql`update casa_atipica.triagem set ${sql(paraBanco({
       parecer_status: "erro",
       parecer_ia: { erro: String(e instanceof Error ? e.message : e).slice(0, 500) },
-    }).eq("id", id);
+    }) as never)} where id = ${id}`.catch((e2) => console.error("update erro", e2));
   }
 }
