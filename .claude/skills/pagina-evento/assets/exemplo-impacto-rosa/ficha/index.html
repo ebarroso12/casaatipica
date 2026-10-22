@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ficha de inscrição · Impacto Rosa</title>
+  <meta name="description" content="Ficha de inscrição da Reunião de Mulheres do Impacto Rosa · Casa de Oração Franca.">
+  <meta name="theme-color" content="#6e2a44">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="../icons/favicon.svg">
+  <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Ficha de inscrição · Impacto Rosa">
+  <meta property="og:description" content="Preencha sua ficha para a Reunião de Mulheres do Impacto Rosa · Sábado, 07/11 às 15h.">
+  <meta property="og:url" content="https://impactorosa.mentorawaniaarantes.com.br/ficha/">
+  <meta property="og:image" content="https://impactorosa.mentorawaniaarantes.com.br/icons/og-image.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Montserrat:wght@400;500;600;700&display=swap">
+  <style>
+    /* Formulário no estilo Jotform: fundo claro, cartão branco, etapas com progresso,
+       com as cores do Impacto Rosa (vinho, rosa e âmbar). */
+    :root {
+      color-scheme: light;
+      --fundo: #f7eef1;
+      --cartao: #ffffff;
+      --texto: #2e1f26;
+      --suave: #6d5a63;
+      --linha: #ead7de;
+      --vinho: #6e2a44;
+      --rosa: #c24d74;
+      --rosa-claro: #fbe9ef;
+      --ambar: #c97d06;
+      --erro: #c0263c;
+      --ok: #1f9d55;
+      --display: "Cormorant Garamond", Georgia, serif;
+      --corpo: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--fundo); color: var(--texto); font-family: var(--corpo); font-size: 16px; line-height: 1.55; }
+    img { max-width: 100%; height: auto; display: block; }
+    :focus-visible { outline: 3px solid var(--ambar); outline-offset: 2px; }
+    [tabindex="-1"]:focus { outline: none; }
+
+    .topo {
+      background: radial-gradient(ellipse at 50% 0%, rgba(236, 157, 178, .35), transparent 60%), linear-gradient(160deg, #2a1220, var(--vinho));
+      color: #fff; text-align: center;
+      padding: calc(36px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 84px max(16px, env(safe-area-inset-left, 0px));
+    }
+    .topo img { width: 44px; margin: 0 auto 10px; }
+    .topo .rotulo { margin: 0; font-size: .72rem; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: #f5c46b; }
+    .topo h1 { margin: 6px 0 6px; font-family: var(--display); font-weight: 600; font-size: clamp(2.1rem, 7vw, 3rem); line-height: 1.05; }
+    .topo h1 em { color: #f4a7bb; }
+    .topo p { margin: 0; color: #f1dfe5; font-size: .95rem; }
+
+    .area { max-width: 720px; margin: -56px auto 0; padding: 0 max(16px, env(safe-area-inset-right, 0px)) 48px max(16px, env(safe-area-inset-left, 0px)); }
+    .cartao { background: var(--cartao); border-radius: 18px; box-shadow: 0 20px 50px rgba(110, 42, 68, .14); padding: clamp(20px, 5vw, 40px); }
+
+    .progresso { display: flex; gap: 6px; margin-bottom: 8px; }
+    .progresso span { flex: 1; height: 6px; border-radius: 99px; background: var(--linha); transition: background .3s; }
+    .progresso span.feito { background: var(--rosa); }
+    .etapa-info { display: flex; justify-content: space-between; font-size: .78rem; color: var(--suave); margin-bottom: 22px; }
+    .etapa-info strong { color: var(--rosa); }
+
+    .etapa h2 { font-family: var(--display); font-size: clamp(1.7rem, 5vw, 2.1rem); line-height: 1.1; margin: 0 0 4px; color: var(--vinho); }
+    .etapa .intro { margin: 0 0 22px; color: var(--suave); font-size: .95rem; }
+
+    .campo { margin-bottom: 22px; }
+    .campo > label, .campo > .pergunta { display: block; font-weight: 600; font-size: .95rem; margin-bottom: 8px; }
+    .obrig { color: var(--erro); margin-left: 2px; }
+    .sub { display: block; font-size: .8rem; color: var(--suave); margin-top: 6px; }
+    input[type="text"], input[type="tel"], input[type="email"], input[type="date"], textarea {
+      width: 100%; min-height: 50px; padding: 12px 14px; border: 1.5px solid var(--linha); border-radius: 10px;
+      background: #fff; color: var(--texto); font: inherit; font-size: 16px; transition: border-color .15s, box-shadow .15s;
+    }
+    textarea { min-height: 110px; resize: vertical; }
+    input:focus, textarea:focus { outline: none; border-color: var(--rosa); box-shadow: 0 0 0 4px rgba(194, 77, 116, .14); }
+    input:disabled, textarea:disabled { background: #f6f1f3; cursor: not-allowed; }
+    [aria-invalid="true"] { border-color: var(--erro) !important; }
+    .erro-campo { color: var(--erro); font-size: .82rem; margin-top: 6px; }
+    .idade { display: inline-flex; margin-top: 8px; padding: 4px 12px; border-radius: 99px; background: var(--rosa-claro); color: var(--vinho); font-weight: 600; font-size: .85rem; }
+
+    .opcoes { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); border: 0; margin: 0; padding: 0; }
+    .opcoes legend { padding: 0; }
+    .opcao { position: relative; }
+    .opcao input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+    .opcao span {
+      display: flex; align-items: center; gap: 10px; min-height: 50px; padding: 12px 14px; border: 1.5px solid var(--linha);
+      border-radius: 10px; background: #fff; font-size: .92rem; font-weight: 500; transition: border-color .15s, background .15s;
+    }
+    .opcao span::before { content: ""; flex: none; width: 18px; height: 18px; border: 2px solid #c9b3bb; border-radius: 50%; background: #fff; }
+    .opcao input[type="checkbox"] + span::before { border-radius: 5px; }
+    .opcao input:checked + span { border-color: var(--rosa); background: var(--rosa-claro); color: var(--vinho); font-weight: 600; }
+    .opcao input:checked + span::before { border-color: var(--rosa); background: var(--rosa); box-shadow: inset 0 0 0 3px #fff; }
+    .opcao input:focus-visible + span { outline: 3px solid var(--ambar); outline-offset: 2px; }
+    .opcao input:disabled + span { opacity: .5; cursor: not-allowed; }
+
+    .contador { display: inline-flex; align-items: center; border: 1.5px solid var(--linha); border-radius: 10px; overflow: hidden; }
+    .contador button { width: 50px; height: 50px; border: 0; background: var(--rosa-claro); color: var(--vinho); font-size: 1.4rem; cursor: pointer; }
+    .contador output { min-width: 64px; text-align: center; font-weight: 700; font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+
+    .aviso { border-radius: 12px; padding: 16px; background: #fff8ec; border: 1.5px solid #f3d7a3; margin-bottom: 22px; font-size: .9rem; }
+    .aviso strong { color: var(--vinho); }
+    .consent { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; font-size: .9rem; }
+    .consent input { width: 22px; height: 22px; flex: none; margin-top: 1px; accent-color: var(--rosa); }
+    .bloqueado { opacity: .55; }
+
+    .resumo { list-style: none; margin: 0 0 22px; padding: 0; border: 1.5px solid var(--linha); border-radius: 12px; overflow: hidden; }
+    .resumo li { display: grid; grid-template-columns: 42% 1fr; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--linha); font-size: .9rem; }
+    .resumo li:last-child { border-bottom: 0; }
+    .resumo li span:first-child { color: var(--suave); }
+    .resumo li span:last-child { font-weight: 600; overflow-wrap: anywhere; }
+
+    .acoes { display: flex; gap: 12px; justify-content: space-between; margin-top: 8px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 12px 26px;
+      border-radius: 10px; border: 0; font: inherit; font-weight: 700; font-size: .95rem; cursor: pointer; text-decoration: none;
+    }
+    .btn-prox { background: var(--rosa); color: #fff; margin-left: auto; }
+    .btn-prox:hover { background: #a83c60; }
+    .btn-voltar { background: transparent; color: var(--suave); border: 1.5px solid var(--linha); }
+    .btn[disabled] { opacity: .7; cursor: wait; }
+    .erro-envio { color: var(--erro); font-size: .9rem; margin: 10px 0 0; }
+
+    .sucesso { text-align: center; padding: 10px 0; }
+    .sucesso .check { width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 14px; display: grid; place-items: center; background: #e7f6ee; color: var(--ok); font-size: 2.2rem; }
+    .sucesso h2 { font-family: var(--display); font-size: 2.2rem; margin: 0 0 8px; color: var(--vinho); }
+    .sucesso p { color: var(--suave); margin: 0 0 22px; }
+    .sucesso .btn { width: 100%; margin-bottom: 10px; }
+    .btn-grupo { background: #25d366; color: #fff; }
+    .btn-pagina { background: var(--rosa-claro); color: var(--vinho); }
+
+    .rodape { text-align: center; color: var(--suave); font-size: .78rem; margin-top: 22px; }
+    .rodape a { color: var(--vinho); }
+    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    @media (max-width: 480px) { .resumo li { grid-template-columns: 1fr; gap: 2px; } .acoes .btn { padding: 12px 18px; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+  </style>
+</head>
+<body>
+  <header class="topo">
+    <img src="../icons/favicon.svg" width="44" height="44" alt="">
+    <p class="rotulo">Reunião de Mulheres · Sábado, 07/11 · 15h</p>
+    <h1>Ficha de inscrição <em>Impacto Rosa</em></h1>
+    <p>Leva uns 3 minutos. Suas respostas ajudam a equipe a cuidar melhor de você.</p>
+  </header>
+
+  <main class="area">
+    <div class="cartao">
+      <div id="cabecalho-etapas">
+        <div class="progresso" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+        <p class="etapa-info"><span>Etapa <strong id="num-etapa">1</strong> de 5</span><span id="nome-etapa">Sobre você</span></p>
+      </div>
+
+      <form id="ficha" novalidate>
+        <!-- ETAPA 1 -->
+        <section class="etapa" data-nome="Sobre você" aria-labelledby="t1">
+          <h2 id="t1" tabindex="-1">Sobre você</h2>
+          <p class="intro">Vamos começar com o básico.</p>
+          <div class="campo">
+            <label for="f-nome">Nome completo<span class="obrig" aria-hidden="true">*</span></label>
+            <input id="f-nome" name="nome" type="text" autocomplete="name" required maxlength="120" placeholder="Nome e sobrenome">
+          </div>
+          <div class="campo">
+            <label for="f-chamar">Como gosta de ser chamada?</label>
+            <input id="f-chamar" name="como_chamar" type="text" maxlength="60" placeholder="Ex.: Mari, Dona Ana">
+          </div>
+          <div class="campo">
+            <label for="f-nasc">Data de nascimento<span class="obrig" aria-hidden="true">*</span></label>
+            <input id="f-nasc" name="data_nascimento" type="date" required min="1900-01-01">
+            <span class="idade" id="idade" hidden></span>
+          </div>
+          <fieldset class="campo opcoes" id="g-sexo">
+            <legend class="pergunta">Sexo<span class="obrig" aria-hidden="true">*</span></legend>
+            <label class="opcao"><input type="radio" name="sexo" value="feminino"><span>Feminino</span></label>
+            <label class="opcao"><input type="radio" name="sexo" value="masculino"><span>Masculino</span></label>
+            <label class="opcao"><input type="radio" name="sexo" value="prefiro_nao_informar"><span>Prefiro não informar</span></label>
+          </fieldset>
+        </section>
+
+        <!-- ETAPA 2 -->
+        <section class="etapa" data-nome="Família e contato" aria-labelledby="t2" hidden>
+          <h2 id="t2" tabindex="-1">Família e contato</h2>
+          <p class="intro">Como está a sua vida hoje e como falamos com você.</p>
+          <fieldset class="campo opcoes" id="g-civil">
+            <legend class="pergunta">Estado civil<span class="obrig" aria-hidden="true">*</span></legend>
+            <label class="opcao"><input type="radio" name="estado_civil" value="solteira"><span>Solteira</span></label>
+            <label class="opcao"><input type="radio" name="estado_civil" value="casada"><span>Casada</span></label>
+            <label class="opcao"><input type="radio" name="estado_civil" value="uniao_estavel"><span>União estável</span></label>
+            <label class="opcao"><input type="radio" name="estado_civil" value="divorciada"><span>Divorciada</span></label>
+            <label class="opcao"><input type="radio" name="estado_civil" value="viuva"><span>Viúva</span></label>
+            <label class="opcao"><input type="radio" name="estado_civil" value="outro"><span>Outro</span></label>
+          </fieldset>
+          <div class="campo">
+            <span class="pergunta" id="l-filhos">Quantos filhos você tem?<span class="obrig" aria-hidden="true">*</span></span>
+            <div class="contador" role="group" aria-labelledby="l-filhos">
+              <button type="button" id="filhos-menos" aria-label="Diminuir">−</button>
+              <output id="filhos" aria-live="polite">0</output>
+              <button type="button" id="filhos-mais" aria-label="Aumentar">+</button>
+            </div>
+          </div>
+          <div class="campo">
+            <label for="f-prof">Profissão</label>
+            <input id="f-prof" name="profissao" type="text" maxlength="100" placeholder="Ex.: professora, empresária, do lar">
+          </div>
+          <div class="campo">
+            <label for="f-zap">WhatsApp com DDD<span class="obrig" aria-hidden="true">*</span></label>
+            <input id="f-zap" name="whatsapp" type="tel" inputmode="numeric" autocomplete="tel-national" required placeholder="(16) 99999-9999">
+          </div>
+          <div class="campo">
+            <label for="f-email">E-mail</label>
+            <input id="f-email" name="email" type="email" inputmode="email" autocomplete="email" maxlength="160" placeholder="voce@email.com">
+          </div>
+        </section>
+
+        <!-- ETAPA 3 -->
+        <section class="etapa" data-nome="Fé" aria-labelledby="t3" hidden>
+          <h2 id="t3" tabindex="-1">Sua fé</h2>
+          <p class="intro">Todas são bem-vindas no Impacto Rosa.</p>
+          <fieldset class="campo opcoes" id="g-religiao">
+            <legend class="pergunta">Qual religião você pertence?</legend>
+            <label class="opcao"><input type="radio" name="religiao" value="Evangélica"><span>Evangélica</span></label>
+            <label class="opcao"><input type="radio" name="religiao" value="Católica"><span>Católica</span></label>
+            <label class="opcao"><input type="radio" name="religiao" value="Espírita"><span>Espírita</span></label>
+            <label class="opcao"><input type="radio" name="religiao" value="Sem religião"><span>Sem religião</span></label>
+            <label class="opcao"><input type="radio" name="religiao" value="Outra"><span>Outra</span></label>
+          </fieldset>
+          <div class="campo" id="c-religiao-outra" hidden>
+            <label for="f-religiao-outra">Qual?</label>
+            <input id="f-religiao-outra" type="text" maxlength="50">
+          </div>
+          <div class="campo">
+            <label for="f-igreja">Qual igreja você frequenta?</label>
+            <input id="f-igreja" name="igreja" type="text" maxlength="120" placeholder="Ex.: Casa de Oração Franca">
+            <span class="sub">Se não frequenta nenhuma, pode deixar em branco.</span>
+          </div>
+        </section>
+
+        <!-- ETAPA 4 -->
+        <section class="etapa" data-nome="Cuidado e bem-estar" aria-labelledby="t4" hidden>
+          <h2 id="t4" tabindex="-1">Cuidado e bem-estar</h2>
+          <p class="intro">Estas perguntas são <strong>opcionais</strong>. Elas nos ajudam a acolher você com carinho e a preparar o momento de pilates com segurança.</p>
+          <div class="aviso">
+            <label class="consent" for="f-consent-saude">
+              <input id="f-consent-saude" type="checkbox">
+              <span><strong>Autorizo</strong> o Impacto Rosa e a Casa de Oração Franca a guardar as informações de saúde e de vida pessoal que eu escrever abaixo, de forma <strong>sigilosa</strong>, apenas para o meu acolhimento e cuidado. Sem marcar, você pode pular esta etapa.</span>
+            </label>
+          </div>
+          <div id="bloco-saude" class="bloqueado">
+            <fieldset class="campo opcoes" id="g-emocional">
+              <legend class="pergunta">Você vive algum quadro emocional?</legend>
+              <label class="opcao"><input type="checkbox" name="emocional" value="Ansiedade"><span>Ansiedade</span></label>
+              <label class="opcao"><input type="checkbox" name="emocional" value="Depressão"><span>Depressão</span></label>
+              <label class="opcao"><input type="checkbox" name="emocional" value="Síndrome do pânico"><span>Síndrome do pânico</span></label>
+              <label class="opcao"><input type="checkbox" name="emocional" value="Luto"><span>Luto</span></label>
+              <label class="opcao"><input type="checkbox" name="emocional" value="Estresse"><span>Estresse</span></label>
+              <label class="opcao"><input type="checkbox" name="emocional" value="Nenhum"><span>Nenhum</span></label>
+              <label class="opcao"><input type="checkbox" name="emocional" value="Outro"><span>Outro</span></label>
+            </fieldset>
+            <div class="campo" id="c-emocional-outro" hidden>
+              <label for="f-emocional-outro">Qual?</label>
+              <input id="f-emocional-outro" type="text" maxlength="150">
+            </div>
+
+            <fieldset class="campo opcoes" id="g-medicacao">
+              <legend class="pergunta">Toma alguma medicação?</legend>
+              <label class="opcao"><input type="radio" name="toma_medicacao" value="sim"><span>Sim</span></label>
+              <label class="opcao"><input type="radio" name="toma_medicacao" value="nao"><span>Não</span></label>
+            </fieldset>
+            <div class="campo" id="c-medicacoes" hidden>
+              <label for="f-medicacoes">Quais medicações?</label>
+              <input id="f-medicacoes" type="text" maxlength="500">
+            </div>
+
+            <fieldset class="campo opcoes" id="g-fisica">
+              <legend class="pergunta">Como está sua condição física?</legend>
+              <label class="opcao"><input type="radio" name="condicao_fisica" value="boa"><span>Boa, sem limitações</span></label>
+              <label class="opcao"><input type="radio" name="condicao_fisica" value="limitacao_leve"><span>Tenho limitações leves</span></label>
+              <label class="opcao"><input type="radio" name="condicao_fisica" value="limitacao_importante"><span>Tenho limitações importantes</span></label>
+            </fieldset>
+            <div class="campo" id="c-fisica-obs" hidden>
+              <label for="f-fisica-obs">Conte um pouco (ajuda no pilates)</label>
+              <input id="f-fisica-obs" type="text" maxlength="500" placeholder="Ex.: dor no joelho, cirurgia recente">
+            </div>
+
+            <fieldset class="campo opcoes" id="g-patologia">
+              <legend class="pergunta">Tem alguma patologia (doença)?</legend>
+              <label class="opcao"><input type="radio" name="tem_patologia" value="sim"><span>Sim</span></label>
+              <label class="opcao"><input type="radio" name="tem_patologia" value="nao"><span>Não</span></label>
+            </fieldset>
+            <div class="campo" id="c-patologias" hidden>
+              <label for="f-patologias">Quais?</label>
+              <input id="f-patologias" type="text" maxlength="500" placeholder="Ex.: diabetes, hipertensão">
+            </div>
+
+            <div class="campo">
+              <label for="f-sofrimento">Está passando por algum tipo de sofrimento?</label>
+              <textarea id="f-sofrimento" maxlength="2000" placeholder="Se quiser, escreva aqui. Vamos orar por você."></textarea>
+            </div>
+            <div class="campo">
+              <label for="f-familiar">Alguma situação familiar que te incomoda?</label>
+              <textarea id="f-familiar" maxlength="2000"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- ETAPA 5 -->
+        <section class="etapa" data-nome="Confirmar" aria-labelledby="t5" hidden>
+          <h2 id="t5" tabindex="-1">Confira e envie</h2>
+          <p class="intro">Veja se está tudo certo. Se precisar, volte e corrija.</p>
+          <ul class="resumo" id="resumo"></ul>
+          <div class="hp" aria-hidden="true"><label for="f-site">Site</label><input id="f-site" type="text" tabindex="-1" autocomplete="off"></div>
+          <div class="campo">
+            <label class="consent" for="f-consent">
+              <input id="f-consent" type="checkbox">
+              <span>Autorizo o Impacto Rosa e a Casa de Oração Franca a usarem meus dados para falar comigo sobre os encontros e para o meu acolhimento.<span class="obrig" aria-hidden="true">*</span></span>
+            </label>
+          </div>
+        </section>
+
+        <p class="erro-envio" id="erro-envio" role="alert" hidden></p>
+        <div class="acoes">
+          <button type="button" class="btn btn-voltar" id="voltar" hidden>← Voltar</button>
+          <button type="submit" class="btn btn-prox" id="proximo">Próximo →</button>
+        </div>
+      </form>
+
+      <div class="sucesso" id="sucesso" hidden>
+        <div class="check" aria-hidden="true">✓</div>
+        <h2 tabindex="-1" id="sucesso-titulo">Ficha enviada!</h2>
+        <p><span id="sucesso-nome">Obrigada</span>, recebemos suas respostas com carinho. Te esperamos no sábado, 07/11, às 15h, na Casa de Oração.</p>
+        <a class="btn btn-grupo" href="https://chat.whatsapp.com/GKTrelO5cqL79CvpSnSm1C?mode=gi_t" target="_blank" rel="noopener">Entrar no grupo do WhatsApp</a>
+        <a class="btn btn-pagina" href="../">Voltar para a página do Impacto Rosa</a>
+      </div>
+    </div>
+    <p class="rodape">Seus dados ficam guardados com sigilo e só a equipe de acolhimento tem acesso.<br>
+      <a href="../">Impacto Rosa</a> · Casa de Oração · Av. Alagoas, 1163 · Franca-SP</p>
+  </main>
+
+  <script>
+  (function () {
+    'use strict';
+    // Grava na tabela impacto_rosa_fichas (Supabase, projeto Selah). A chave pública só INSERE;
+    // ler/alterar/apagar é bloqueado no banco. Dados de saúde só entram com o consentimento marcado.
+    var URL_FICHAS = 'https://hymbjpnrwhtngkivrqht.supabase.co/rest/v1/impacto_rosa_fichas';
+    var CHAVE = 'sb_publishable_xNcKkJczWh0YUUwI2THmDg_VFrhqAuD';
+
+    var form = document.getElementById('ficha');
+    var etapas = Array.prototype.slice.call(form.querySelectorAll('.etapa'));
+    var barras = document.querySelectorAll('.progresso span');
+    var btnProx = document.getElementById('proximo');
+    var btnVoltar = document.getElementById('voltar');
+    var erroEnvio = document.getElementById('erro-envio');
+    var atual = 0;
+    var filhos = 0;
+    var $ = function (id) { return document.getElementById(id); };
+    var marcado = function (nome) { var e = form.querySelector('input[name="' + nome + '"]:checked'); return e ? e.value : null; };
+    var texto = function (id) { var v = $(id).value.trim().replace(/\s+/g, ' '); return v || null; };
+
+    // Idade calculada pela data de nascimento
+    var hoje = new Date();
+    $('f-nasc').max = hoje.toISOString().slice(0, 10);
+    function idade() {
+      var v = $('f-nasc').value; if (!v) return null;
+      var n = new Date(v + 'T12:00:00'); var i = hoje.getFullYear() - n.getFullYear();
+      var m = hoje.getMonth() - n.getMonth();
+      if (m < 0 || (m === 0 && hoje.getDate() < n.getDate())) i--;
+      return i >= 0 && i <= 120 ? i : null;
+    }
+    $('f-nasc').addEventListener('input', function () {
+      var i = idade(); $('idade').hidden = i === null; $('idade').textContent = i === null ? '' : i + ' anos';
+    });
+
+    // Contador de filhos
+    function poeFilhos(n) { filhos = Math.max(0, Math.min(30, n)); $('filhos').textContent = filhos; }
+    $('filhos-menos').addEventListener('click', function () { poeFilhos(filhos - 1); });
+    $('filhos-mais').addEventListener('click', function () { poeFilhos(filhos + 1); });
+
+    // Máscara do WhatsApp
+    $('f-zap').addEventListener('input', function () {
+      var d = this.value.replace(/\D/g, '').replace(/^55(?=\d{10,11}$)/, '').slice(0, 11);
+      this.value = d.length > 10 ? d.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3')
+        : d.length > 6 ? d.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3')
+        : d.length > 2 ? d.replace(/^(\d{2})(\d*)/, '($1) $2') : (d ? '(' + d : '');
+    });
+
+    // Campos que aparecem conforme a resposta
+    function mostraSe(nome, valor, campoId) {
+      form.querySelectorAll('input[name="' + nome + '"]').forEach(function (r) {
+        r.addEventListener('change', function () {
+          var ativo = nome === 'emocional'
+            ? !!form.querySelector('input[name="emocional"][value="Outro"]:checked')
+            : (valor === '*' ? r.checked && r.value !== 'boa' : marcado(nome) === valor);
+          $(campoId).hidden = !ativo;
+        });
+      });
+    }
+    mostraSe('religiao', 'Outra', 'c-religiao-outra');
+    mostraSe('emocional', 'Outro', 'c-emocional-outro');
+    mostraSe('toma_medicacao', 'sim', 'c-medicacoes');
+    mostraSe('condicao_fisica', '*', 'c-fisica-obs');
+    mostraSe('tem_patologia', 'sim', 'c-patologias');
+    // "Nenhum" desmarca os outros quadros (e vice-versa)
+    form.querySelectorAll('input[name="emocional"]').forEach(function (c) {
+      c.addEventListener('change', function () {
+        if (!c.checked) return;
+        form.querySelectorAll('input[name="emocional"]').forEach(function (o) {
+          if (o !== c && (c.value === 'Nenhum' || o.value === 'Nenhum')) o.checked = false;
+        });
+        $('c-emocional-outro').hidden = !form.querySelector('input[name="emocional"][value="Outro"]:checked');
+      });
+    });
+
+    // Bloco de saúde só libera com o consentimento específico
+    var blocoSaude = $('bloco-saude');
+    function liberaSaude() {
+      var ok = $('f-consent-saude').checked;
+      blocoSaude.classList.toggle('bloqueado', !ok);
+      blocoSaude.querySelectorAll('input, textarea').forEach(function (e) { e.disabled = !ok; });
+    }
+    $('f-consent-saude').addEventListener('change', liberaSaude);
+    liberaSaude();
+
+    // Validação por etapa
+    function limpaErros(sec) {
+      sec.querySelectorAll('.erro-campo').forEach(function (e) { e.remove(); });
+      sec.querySelectorAll('[aria-invalid]').forEach(function (e) { e.removeAttribute('aria-invalid'); });
+    }
+    function erro(alvo, msg) {
+      var p = document.createElement('p'); p.className = 'erro-campo'; p.textContent = msg;
+      var caixa = alvo.closest('.campo') || alvo; caixa.appendChild(p);
+      if (alvo.matches('input, textarea')) alvo.setAttribute('aria-invalid', 'true');
+      return alvo;
+    }
+    function valida(i) {
+      var sec = etapas[i], primeiro = null, f = function (el) { if (!primeiro) primeiro = el; };
+      limpaErros(sec);
+      if (i === 0) {
+        var nome = texto('f-nome') || '';
+        if (nome.length < 3 || nome.indexOf(' ') < 0) f(erro($('f-nome'), 'Escreva seu nome completo (nome e sobrenome).'));
+        if (idade() === null) f(erro($('f-nasc'), 'Informe sua data de nascimento.'));
+        if (!marcado('sexo')) f(erro($('g-sexo'), 'Escolha uma opção.'));
+      }
+      if (i === 1) {
+        if (!marcado('estado_civil')) f(erro($('g-civil'), 'Escolha uma opção.'));
+        var zap = $('f-zap').value.replace(/\D/g, '');
+        if (zap.length < 10 || zap.length > 11) f(erro($('f-zap'), 'Confira o WhatsApp com DDD, ex.: (16) 99999-9999.'));
+        var em = texto('f-email');
+        if (em && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) f(erro($('f-email'), 'Confira o e-mail, ex.: voce@email.com.'));
+      }
+      if (i === 4 && !$('f-consent').checked) f(erro($('f-consent').closest('.consent'), 'Marque a autorização para enviar a ficha.'));
+      if (primeiro) { (primeiro.matches('input, textarea') ? primeiro : primeiro.querySelector('input') || primeiro).focus(); }
+      return !primeiro;
+    }
+
+    // Dados para o banco
+    function dados() {
+      var saude = $('f-consent-saude').checked;
+      var emoc = Array.prototype.map.call(form.querySelectorAll('input[name="emocional"]:checked'), function (c) {
+        return c.value === 'Outro' && texto('f-emocional-outro') ? 'Outro: ' + texto('f-emocional-outro') : c.value;
+      });
+      var rel = marcado('religiao');
+      if (rel === 'Outra' && texto('f-religiao-outra')) rel = texto('f-religiao-outra');
+      var med = marcado('toma_medicacao'), pat = marcado('tem_patologia'), fis = marcado('condicao_fisica');
+      var d = {
+        nome: texto('f-nome'), como_chamar: texto('f-chamar'), data_nascimento: $('f-nasc').value, idade: idade(),
+        sexo: marcado('sexo'), estado_civil: marcado('estado_civil'), filhos: filhos, profissao: texto('f-prof'),
+        whatsapp: '55' + $('f-zap').value.replace(/\D/g, ''), email: texto('f-email') ? texto('f-email').toLowerCase() : null,
+        religiao: rel, igreja: texto('f-igreja'), consentimento: true, consentimento_saude: saude
+      };
+      if (saude) {
+        d.quadro_emocional = emoc.length ? emoc.join(', ') : null;
+        d.toma_medicacao = med ? med === 'sim' : null;
+        d.medicacoes = med === 'sim' ? texto('f-medicacoes') : null;
+        d.condicao_fisica = fis;
+        d.condicao_fisica_obs = fis && fis !== 'boa' ? texto('f-fisica-obs') : null;
+        d.tem_patologia = pat ? pat === 'sim' : null;
+        d.patologias = pat === 'sim' ? texto('f-patologias') : null;
+        d.sofrimento = texto('f-sofrimento');
+        d.situacao_familiar = texto('f-familiar');
+      }
+      return d;
+    }
+
+    var ROTULOS = {
+      sexo: { feminino: 'Feminino', masculino: 'Masculino', prefiro_nao_informar: 'Prefiro não informar' },
+      estado_civil: { solteira: 'Solteira', casada: 'Casada', uniao_estavel: 'União estável', divorciada: 'Divorciada', viuva: 'Viúva', outro: 'Outro' },
+      condicao_fisica: { boa: 'Boa', limitacao_leve: 'Limitações leves', limitacao_importante: 'Limitações importantes' }
+    };
+    function montaResumo() {
+      var d = dados(), linhas = [
+        ['Nome', d.nome], ['Como gosta de ser chamada', d.como_chamar],
+        ['Nascimento', d.data_nascimento.split('-').reverse().join('/') + (d.idade !== null ? ' (' + d.idade + ' anos)' : '')],
+        ['Sexo', ROTULOS.sexo[d.sexo]], ['Estado civil', ROTULOS.estado_civil[d.estado_civil]], ['Filhos', String(d.filhos)],
+        ['Profissão', d.profissao], ['WhatsApp', $('f-zap').value], ['E-mail', d.email], ['Religião', d.religiao], ['Igreja', d.igreja],
+        ['Cuidado e bem-estar', d.consentimento_saude ? 'Respondido (sigiloso)' : 'Não respondido']
+      ];
+      var ul = $('resumo'); ul.innerHTML = '';
+      linhas.forEach(function (l) {
+        var li = document.createElement('li'), a = document.createElement('span'), b = document.createElement('span');
+        a.textContent = l[0]; b.textContent = l[1] || '—'; li.appendChild(a); li.appendChild(b); ul.appendChild(li);
+      });
+    }
+
+    function vaiPara(i) {
+      etapas[atual].hidden = true; atual = i; etapas[atual].hidden = false;
+      barras.forEach(function (b, k) { b.classList.toggle('feito', k <= atual); });
+      $('num-etapa').textContent = atual + 1; $('nome-etapa').textContent = etapas[atual].dataset.nome;
+      btnVoltar.hidden = atual === 0;
+      btnProx.textContent = atual === etapas.length - 1 ? 'Enviar ficha' : 'Próximo →';
+      erroEnvio.hidden = true;
+      if (atual === etapas.length - 1) montaResumo();
+      window.scrollTo({ top: 0 });
+      etapas[atual].querySelector('h2').focus({ preventScroll: true });
+    }
+    btnVoltar.addEventListener('click', function () { if (atual > 0) vaiPara(atual - 1); });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!valida(atual)) return;
+      if (atual < etapas.length - 1) { vaiPara(atual + 1); return; }
+      var d = dados();
+      var fim = function () {
+        form.hidden = true; $('cabecalho-etapas').hidden = true;
+        $('sucesso-nome').textContent = (d.como_chamar || d.nome.split(' ')[0]);
+        $('sucesso').hidden = false; window.scrollTo({ top: 0 }); $('sucesso-titulo').focus();
+      };
+      if ($('f-site').value) { fim(); return; } // robô
+      btnProx.disabled = true; btnProx.textContent = 'Enviando…';
+      fetch(URL_FICHAS, {
+        method: 'POST',
+        headers: { apikey: CHAVE, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify(d)
+      }).then(function (r) {
+        if (!r.ok) throw new Error('status ' + r.status);
+        fim();
+      }).catch(function () {
+        erroEnvio.textContent = 'Não conseguimos enviar sua ficha agora. Confira sua internet e toque em "Enviar ficha" de novo.';
+        erroEnvio.hidden = false;
+      }).then(function () { btnProx.disabled = false; btnProx.textContent = 'Enviar ficha'; });
+    });
+
+    vaiPara(0);
+    window.scrollTo({ top: 0 });
+  })();
+  </script>
+</body>
+</html>

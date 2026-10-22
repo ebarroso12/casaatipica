@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Triagem de acolhimento · Casa Atípica</title>
+  <meta name="description" content="Triagem de acolhimento da Casa Atípica para mães de filhos com autismo. Gratuita, sigilosa, 20 perguntas.">
+  <meta name="theme-color" content="#0b2a33">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="../icons/favicon.svg">
+  <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Triagem de acolhimento · Casa Atípica">
+  <meta property="og:description" content="Quem cuida também precisa ser cuidada. 20 perguntas simples, gratuita e sigilosa.">
+  <meta property="og:url" content="https://ebarroso12.github.io/casaatipica/triagem/">
+  <meta property="og:image" content="https://ebarroso12.github.io/casaatipica/icons/og-image.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Montserrat:wght@400;500;600;700&display=swap">
+  <style>
+    /* Formulário no estilo Jotform (modelo Impacto Rosa): fundo claro, cartão branco, etapas com
+       progresso, nas cores da Casa Atípica (azul-petróleo, turquesa e girassol). */
+    :root {
+      color-scheme: light;
+      --fundo: #eef6f7;
+      --cartao: #ffffff;
+      --texto: #14262b;
+      --suave: #52696f;
+      --linha: #d3e4e7;
+      --escuro: #0b2a33;
+      --marca: #1f8a9b;
+      --marca-claro: #e3f4f6;
+      --girassol: #c98a06;
+      --erro: #c0263c;
+      --ok: #1f9d55;
+      --display: "Cormorant Garamond", Georgia, serif;
+      --corpo: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--fundo); color: var(--texto); font-family: var(--corpo); font-size: 16px; line-height: 1.55; }
+    img { max-width: 100%; height: auto; display: block; }
+    :focus-visible { outline: 3px solid var(--girassol); outline-offset: 2px; }
+    [tabindex="-1"]:focus { outline: none; }
+
+    .topo {
+      background: radial-gradient(ellipse at 50% 0%, rgba(95, 208, 220, .3), transparent 60%), linear-gradient(160deg, #071419, var(--escuro));
+      color: #fff; text-align: center;
+      padding: calc(36px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 84px max(16px, env(safe-area-inset-left, 0px));
+    }
+    .topo img { width: 64px; margin: 0 auto 10px; }
+    .topo .rotulo { margin: 0; font-size: .72rem; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: #f6b93b; }
+    .topo h1 { margin: 6px 0 6px; font-family: var(--display); font-weight: 600; font-size: clamp(2.1rem, 7vw, 3rem); line-height: 1.05; }
+    .topo h1 em { color: #7fd8e2; }
+    .topo p { margin: 0; color: #d5ecef; font-size: .95rem; }
+
+    .area { max-width: 720px; margin: -56px auto 0; padding: 0 max(16px, env(safe-area-inset-right, 0px)) 48px max(16px, env(safe-area-inset-left, 0px)); }
+    .cartao { background: var(--cartao); border-radius: 18px; box-shadow: 0 20px 50px rgba(11, 42, 51, .14); padding: clamp(20px, 5vw, 40px); }
+
+    .progresso { display: flex; gap: 6px; margin-bottom: 8px; }
+    .progresso span { flex: 1; height: 6px; border-radius: 99px; background: var(--linha); transition: background .3s; }
+    .progresso span.feito { background: var(--marca); }
+    .etapa-info { display: flex; justify-content: space-between; gap: 12px; font-size: .78rem; color: var(--suave); margin-bottom: 22px; }
+    .etapa-info strong { color: var(--marca); }
+
+    .etapa h2 { font-family: var(--display); font-size: clamp(1.7rem, 5vw, 2.1rem); line-height: 1.1; margin: 0 0 4px; color: var(--escuro); }
+    .etapa .intro { margin: 0 0 22px; color: var(--suave); font-size: .95rem; }
+
+    .campo { margin-bottom: 24px; }
+    .campo > label, .campo > .pergunta { display: block; font-weight: 600; font-size: .98rem; margin-bottom: 10px; }
+    .num { display: inline-grid; place-items: center; min-width: 26px; height: 26px; padding: 0 6px; margin-right: 8px; border-radius: 99px; background: var(--escuro); color: #fff; font-size: .75rem; font-weight: 700; vertical-align: 1px; }
+    .obrig { color: var(--erro); margin-left: 2px; }
+    .sub { display: block; font-size: .8rem; color: var(--suave); margin-top: 6px; font-weight: 400; }
+    input[type="text"], input[type="tel"], input[type="email"], input[type="date"], input[type="number"], textarea {
+      width: 100%; min-height: 50px; padding: 12px 14px; border: 1.5px solid var(--linha); border-radius: 10px;
+      background: #fff; color: var(--texto); font: inherit; font-size: 16px; transition: border-color .15s, box-shadow .15s;
+    }
+    textarea { min-height: 120px; resize: vertical; }
+    input:focus, textarea:focus { outline: none; border-color: var(--marca); box-shadow: 0 0 0 4px rgba(31, 138, 155, .14); }
+    [aria-invalid="true"] { border-color: var(--erro) !important; }
+    .erro-campo { color: var(--erro); font-size: .82rem; margin: 6px 0 0; }
+    .idade { display: inline-flex; margin-top: 8px; padding: 4px 12px; border-radius: 99px; background: var(--marca-claro); color: var(--escuro); font-weight: 600; font-size: .85rem; }
+    .duas { display: grid; gap: 0 14px; grid-template-columns: 1fr; }
+    @media (min-width: 560px) { .duas { grid-template-columns: 1fr 1fr; } }
+
+    .opcoes { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); border: 0; margin: 0 0 24px; padding: 0; min-width: 0; }
+    .opcoes legend { padding: 0; margin-bottom: 10px; font-weight: 600; font-size: .98rem; float: left; width: 100%; }
+    .opcoes legend + * { clear: left; }
+    .opcao { position: relative; }
+    .opcao input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+    .opcao span {
+      display: flex; align-items: center; gap: 10px; min-height: 52px; height: 100%; padding: 12px 14px; border: 1.5px solid var(--linha);
+      border-radius: 10px; background: #fff; font-size: .92rem; font-weight: 500; transition: border-color .15s, background .15s;
+    }
+    .opcao span::before { content: ""; flex: none; width: 18px; height: 18px; border: 2px solid #a9c3c8; border-radius: 50%; background: #fff; }
+    .opcao input[type="checkbox"] + span::before { border-radius: 5px; }
+    .opcao input:checked + span { border-color: var(--marca); background: var(--marca-claro); color: var(--escuro); font-weight: 600; }
+    .opcao input:checked + span::before { border-color: var(--marca); background: var(--marca); box-shadow: inset 0 0 0 3px #fff; }
+    .opcao input:focus-visible + span { outline: 3px solid var(--girassol); outline-offset: 2px; }
+
+    .contador { display: inline-flex; align-items: center; border: 1.5px solid var(--linha); border-radius: 10px; overflow: hidden; }
+    .contador button { width: 50px; height: 50px; border: 0; background: var(--marca-claro); color: var(--escuro); font-size: 1.4rem; cursor: pointer; }
+    .contador output { min-width: 64px; text-align: center; font-weight: 700; font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+
+    .aviso { border-radius: 12px; padding: 16px; background: #fff8ec; border: 1.5px solid #f3d7a3; margin-bottom: 16px; font-size: .9rem; }
+    .aviso strong { color: var(--escuro); }
+    .apoio { border-radius: 12px; padding: 16px; background: #fdecef; border: 1.5px solid #f2b8c3; margin: -8px 0 24px; font-size: .92rem; }
+    .apoio a { color: var(--erro); font-weight: 700; }
+    .consent { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; font-size: .9rem; }
+    .consent input { width: 22px; height: 22px; flex: none; margin-top: 1px; accent-color: var(--marca); }
+
+    .resumo { list-style: none; margin: 0 0 22px; padding: 0; border: 1.5px solid var(--linha); border-radius: 12px; overflow: hidden; }
+    .resumo li { display: grid; grid-template-columns: 42% 1fr; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--linha); font-size: .9rem; }
+    .resumo li:last-child { border-bottom: 0; }
+    .resumo li span:first-child { color: var(--suave); }
+    .resumo li span:last-child { font-weight: 600; overflow-wrap: anywhere; }
+
+    .acoes { display: flex; gap: 12px; justify-content: space-between; margin-top: 8px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 12px 26px;
+      border-radius: 10px; border: 0; font: inherit; font-weight: 700; font-size: .95rem; cursor: pointer; text-decoration: none;
+    }
+    .btn-prox { background: var(--marca); color: #fff; margin-left: auto; }
+    .btn-prox:hover { background: #17707e; }
+    .btn-voltar { background: transparent; color: var(--suave); border: 1.5px solid var(--linha); }
+    .btn[disabled] { opacity: .7; cursor: wait; }
+    .erro-envio { color: var(--erro); font-size: .9rem; margin: 10px 0 0; }
+
+    .sucesso { text-align: center; padding: 10px 0; }
+    .sucesso .check { width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 14px; display: grid; place-items: center; background: #e7f6ee; color: var(--ok); font-size: 2.2rem; }
+    .sucesso h2 { font-family: var(--display); font-size: 2.2rem; margin: 0 0 8px; color: var(--escuro); }
+    .sucesso p { color: var(--suave); margin: 0 0 18px; }
+    .protocolo { display: inline-block; padding: 10px 18px; border-radius: 12px; background: var(--marca-claro); color: var(--escuro); font-weight: 700; letter-spacing: .12em; margin-bottom: 18px; }
+    .sucesso .apoio { text-align: left; margin: 0 0 18px; }
+    .sucesso .btn { width: 100%; margin-bottom: 10px; }
+    .btn-pagina { background: var(--marca-claro); color: var(--escuro); }
+
+    .rodape { text-align: center; color: var(--suave); font-size: .78rem; margin-top: 22px; }
+    .rodape a { color: var(--escuro); }
+    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    @media (max-width: 480px) { .resumo li { grid-template-columns: 1fr; gap: 2px; } .acoes .btn { padding: 12px 18px; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+  </style>
+</head>
+<body>
+  <header class="topo">
+    <img src="../icons/favicon.svg" width="64" height="40" alt="">
+    <p class="rotulo">Casa Atípica · Acolhimento</p>
+    <h1>Triagem de <em>acolhimento</em></h1>
+    <p>20 perguntas simples · uns 8 minutos · gratuita e sigilosa</p>
+  </header>
+
+  <main class="area">
+    <div class="cartao">
+      <div id="cabecalho-etapas">
+        <div class="progresso" id="progresso" aria-hidden="true"></div>
+        <p class="etapa-info"><span>Etapa <strong id="num-etapa">1</strong> de <span id="total-etapas">7</span></span><span id="nome-etapa"></span></p>
+      </div>
+
+      <form id="triagem" novalidate>
+        <!-- ETAPA 1 -->
+        <section class="etapa" data-nome="Antes de começar" aria-labelledby="t1">
+          <h2 id="t1" tabindex="-1">Antes de começar</h2>
+          <p class="intro">Olá, mãe! Esta triagem ajuda a equipe da Casa Atípica a entender como você está e quem precisa de acolhimento primeiro. Não existe resposta certa ou errada: responda com sinceridade.</p>
+          <div class="aviso">
+            <label class="consent" for="f-consent">
+              <input id="f-consent" type="checkbox">
+              <span><strong>Autorizo</strong> a Casa Atípica a usar meus dados para falar comigo sobre o acolhimento.<span class="obrig" aria-hidden="true">*</span></span>
+            </label>
+          </div>
+          <div class="aviso">
+            <label class="consent" for="f-consent-saude">
+              <input id="f-consent-saude" type="checkbox">
+              <span><strong>Autorizo</strong> a Casa Atípica a guardar, de forma <strong>sigilosa</strong>, as informações sobre minha saúde emocional, minha família e minha fé, apenas para a minha triagem e o meu acolhimento. Sei que uma ferramenta de inteligência artificial ajuda a equipe a organizar as respostas, sem receber meu nome nem meu telefone.<span class="obrig" aria-hidden="true">*</span></span>
+            </label>
+          </div>
+          <p class="sub">Se você está em sofrimento muito forte agora, não espere: ligue <strong>188</strong> (CVV, 24 horas, de graça) ou <strong>192</strong> (SAMU).</p>
+        </section>
+
+        <!-- ETAPA 2 -->
+        <section class="etapa" data-nome="Seus dados" aria-labelledby="t2" hidden>
+          <h2 id="t2" tabindex="-1">Seus dados</h2>
+          <p class="intro">Para a equipe saber quem é você e como falar com você.</p>
+          <div class="campo">
+            <label for="f-nome">Nome completo<span class="obrig" aria-hidden="true">*</span></label>
+            <input id="f-nome" type="text" autocomplete="name" maxlength="120" placeholder="Nome e sobrenome">
+          </div>
+          <div class="campo">
+            <label for="f-chamar">Como gosta de ser chamada?</label>
+            <input id="f-chamar" type="text" maxlength="60" placeholder="Ex.: Mari, Dona Ana">
+          </div>
+          <div class="campo">
+            <label for="f-nasc">Data de nascimento<span class="obrig" aria-hidden="true">*</span></label>
+            <input id="f-nasc" type="date" min="1920-01-01">
+            <span class="idade" id="idade" hidden></span>
+          </div>
+          <div class="duas">
+            <div class="campo">
+              <label for="f-zap">WhatsApp com DDD<span class="obrig" aria-hidden="true">*</span></label>
+              <input id="f-zap" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(16) 99999-9999">
+            </div>
+            <div class="campo">
+              <label for="f-email">E-mail</label>
+              <input id="f-email" type="email" inputmode="email" autocomplete="email" maxlength="160" placeholder="voce@email.com">
+            </div>
+            <div class="campo">
+              <label for="f-cidade">Cidade<span class="obrig" aria-hidden="true">*</span></label>
+              <input id="f-cidade" type="text" autocomplete="address-level2" maxlength="100" placeholder="Ex.: Franca">
+            </div>
+            <div class="campo">
+              <label for="f-bairro">Bairro</label>
+              <input id="f-bairro" type="text" maxlength="100">
+            </div>
+          </div>
+          <div id="g-civil"></div>
+          <div class="campo">
+            <span class="pergunta" id="l-filhos">Quantos filhos você tem?</span>
+            <div class="contador" role="group" aria-labelledby="l-filhos">
+              <button type="button" id="filhos-menos" aria-label="Diminuir">−</button>
+              <output id="filhos" aria-live="polite">1</output>
+              <button type="button" id="filhos-mais" aria-label="Aumentar">+</button>
+            </div>
+          </div>
+          <div id="g-beneficios"></div>
+          <div class="duas">
+            <div class="campo">
+              <label for="f-religiao">Religião</label>
+              <input id="f-religiao" type="text" maxlength="60" placeholder="Ex.: evangélica, católica, nenhuma">
+            </div>
+            <div class="campo">
+              <label for="f-igreja">Igreja que frequenta</label>
+              <input id="f-igreja" type="text" maxlength="120">
+            </div>
+          </div>
+        </section>
+
+        <!-- ETAPA 3 -->
+        <section class="etapa" data-nome="Seu filho(a)" aria-labelledby="t3" hidden>
+          <h2 id="t3" tabindex="-1">Seu filho(a)</h2>
+          <p class="intro">Fale do filho(a) com autismo. Se for mais de um, pense no que precisa de mais cuidado.</p>
+          <div class="duas">
+            <div class="campo">
+              <label for="f-filho-nome">Nome do filho(a)</label>
+              <input id="f-filho-nome" type="text" maxlength="120">
+            </div>
+            <div class="campo">
+              <label for="f-filho-idade">Idade do filho(a)<span class="obrig" aria-hidden="true">*</span></label>
+              <input id="f-filho-idade" type="number" inputmode="numeric" min="0" max="80" placeholder="Em anos">
+            </div>
+          </div>
+          <div data-perguntas="q1 q2 q3 q4 q5"></div>
+        </section>
+
+        <!-- ETAPA 4 -->
+        <section class="etapa" data-nome="Sua rede de apoio" aria-labelledby="t4" hidden>
+          <h2 id="t4" tabindex="-1">Sua vida e sua rede de apoio</h2>
+          <p class="intro">Como está a sua rotina, a sua casa e quem está do seu lado.</p>
+          <div data-perguntas="q6 q7 q8 q9 q10"></div>
+        </section>
+
+        <!-- ETAPA 5 -->
+        <section class="etapa" data-nome="Como você está" aria-labelledby="t5" hidden>
+          <h2 id="t5" tabindex="-1">Como você está se sentindo</h2>
+          <p class="intro">Pense <strong>nas últimas 2 semanas</strong>. Com que frequência isto aconteceu com você?</p>
+          <div data-perguntas="q11 q12 q13 q14 q15 q16 q17"></div>
+          <div class="apoio" id="apoio-risco" role="note" hidden>
+            <strong>Obrigada por confiar isso à gente.</strong> Você não está sozinha. Se esse pensamento estiver forte agora,
+            ligue <a href="tel:188">188</a> (CVV, 24 horas, de graça) ou <a href="tel:192">192</a> (SAMU). Ao enviar a triagem,
+            nossa equipe vai falar com você o quanto antes.
+          </div>
+          <div data-perguntas="q18"></div>
+          <div class="campo" id="c-medicacoes" hidden>
+            <label for="f-medicacoes">Quais remédios você toma ou tomava? <span class="sub">Opcional</span></label>
+            <input id="f-medicacoes" type="text" maxlength="300">
+          </div>
+        </section>
+
+        <!-- ETAPA 6 -->
+        <section class="etapa" data-nome="Fé e pedidos de ajuda" aria-labelledby="t6" hidden>
+          <h2 id="t6" tabindex="-1">Sua fé e o que você precisa</h2>
+          <p class="intro">Quase lá! Todas as crenças são respeitadas aqui.</p>
+          <div data-perguntas="q19 q20"></div>
+          <div class="campo">
+            <label for="f-relato">Quer contar mais alguma coisa com suas palavras? <span class="sub">Opcional. O que você está vivendo, o que mais pesa, o que gostaria de receber.</span></label>
+            <textarea id="f-relato" maxlength="3000"></textarea>
+          </div>
+        </section>
+
+        <!-- ETAPA 7 -->
+        <section class="etapa" data-nome="Confirmar" aria-labelledby="t7" hidden>
+          <h2 id="t7" tabindex="-1">Confira e envie</h2>
+          <p class="intro">Veja se seus dados estão certos. Se precisar, volte e corrija.</p>
+          <ul class="resumo" id="resumo"></ul>
+          <div class="hp" aria-hidden="true"><label for="f-site">Site</label><input id="f-site" type="text" tabindex="-1" autocomplete="off"></div>
+        </section>
+
+        <p class="erro-envio" id="erro-envio" role="alert" hidden></p>
+        <div class="acoes">
+          <button type="button" class="btn btn-voltar" id="voltar" hidden>← Voltar</button>
+          <button type="submit" class="btn btn-prox" id="proximo">Começar →</button>
+        </div>
+      </form>
+
+      <div class="sucesso" id="sucesso" hidden>
+        <div class="check" aria-hidden="true">✓</div>
+        <h2 tabindex="-1" id="sucesso-titulo">Triagem enviada!</h2>
+        <p><span id="sucesso-nome">Obrigada</span>, recebemos suas respostas com carinho. A equipe da Casa Atípica vai falar com você pelo WhatsApp.</p>
+        <div class="protocolo">Protocolo <span id="protocolo"></span></div>
+        <div class="apoio" id="sucesso-risco" hidden>
+          <strong>Nossa equipe vai falar com você o quanto antes.</strong> Enquanto isso, se precisar conversar agora, ligue
+          <a href="tel:188">188</a> (CVV, 24 horas, de graça) ou <a href="tel:192">192</a> (SAMU).
+        </div>
+        <a class="btn btn-pagina" href="../">Voltar para a página da Casa Atípica</a>
+      </div>
+    </div>
+    <p class="rodape">Suas respostas ficam guardadas com sigilo e só a equipe de acolhimento tem acesso.<br>
+      <a href="../">Casa Atípica</a> · Acolhimento para mães atípicas</p>
+  </main>
+
+  <script>
+  (function () {
+    'use strict';
+    // Envia para a função `triagem` do Supabase (projeto crmclinica). Ela recalcula a pontuação,
+    // grava em casaatipica_triagens e gera o parecer da IA para a equipe. A mãe só recebe o protocolo.
+    var URL_TRIAGEM = 'https://umvpwqqjzpxwuxdnnxzy.supabase.co/functions/v1/triagem';
+
+    // As 20 perguntas. Os valores (value) são os mesmos de supabase/functions/triagem/pontuacao.js.
+    var FREQ = [['nenhum', 'Nenhum dia'], ['alguns', 'Alguns dias'], ['metade', 'Mais da metade dos dias'], ['quase_todos', 'Quase todos os dias']];
+    var PERGUNTAS = {
+      q1: ['Seu filho(a) tem o diagnóstico (laudo) de autismo?', [['laudo', 'Sim, tem laudo'], ['investigacao', 'Está em investigação'], ['desconfia', 'Ainda não, mas desconfio']]],
+      q2: ['No dia a dia, quanto de ajuda ele(a) precisa para falar, comer, tomar banho e se vestir?', [['pouca', 'Pouca ajuda'], ['bastante', 'Bastante ajuda'], ['muita', 'Muita ajuda, quase tudo']]],
+      q3: ['Ele(a) faz terapias hoje? (fono, terapia ocupacional, psicólogo, ABA)', [['todas', 'Sim, as que precisa'], ['algumas', 'Só algumas'], ['fila', 'Está na fila de espera'], ['nenhuma', 'Nenhuma']]],
+      q4: ['Quanto você sente que sabe sobre autismo e sobre como ajudar seu filho(a)?', [['bastante', 'Sei bastante'], ['pouco', 'Sei um pouco'], ['muito_pouco', 'Sei muito pouco'], ['perdida', 'Me sinto perdida']]],
+      q5: ['Na sua casa tem mais alguém com autismo ou outra deficiência que depende de você?', [['nao', 'Não'], ['uma', 'Sim, mais uma pessoa'], ['duas_mais', 'Sim, duas ou mais']]],
+      q6: ['Quem te ajuda a cuidar do seu filho(a)?', [['boa_ajuda', 'Tenho boa ajuda'], ['as_vezes', 'Às vezes alguém ajuda'], ['quase_ninguem', 'Quase ninguém'], ['ninguem', 'Ninguém, sou só eu']]],
+      q7: ['Qual é a renda da sua família por mês, mais ou menos?', [['mais_3', 'Mais de 3 salários mínimos'], ['de_2_3', 'De 2 a 3 salários'], ['de_1_2', 'De 1 a 2 salários'], ['ate_1', 'Até 1 salário ou sem renda']]],
+      q8: ['E o trabalho?', [['concilia', 'Trabalho e consigo conciliar'], ['dificil', 'Trabalho, mas está muito difícil'], ['desempregada', 'Estou desempregada'], ['parou', 'Parei de trabalhar para cuidar do meu filho(a)']]],
+      q9: ['Falta alguma coisa básica em casa? (comida, remédio, dinheiro para ir às terapias)', [['nunca', 'Nunca'], ['as_vezes', 'Às vezes'], ['muitas', 'Muitas vezes'], ['sempre', 'Quase sempre']]],
+      q10: ['Você já se sentiu sozinha, julgada ou deixada de lado (família, escola, igreja, vizinhos) por causa do autismo do seu filho(a)?', [['nunca', 'Nunca'], ['as_vezes', 'Às vezes'], ['muitas', 'Muitas vezes'], ['sempre', 'Sempre']]],
+      q11: ['Teve pouco interesse ou pouco prazer em fazer as coisas?', FREQ],
+      q12: ['Se sentiu para baixo, triste ou sem esperança?', FREQ],
+      q13: ['Se sentiu nervosa, ansiosa ou muito tensa?', FREQ],
+      q14: ['Não conseguiu parar de se preocupar ou controlar as preocupações?', FREQ],
+      q15: ['Se sentiu esgotada, sem forças, como se não aguentasse mais?', FREQ],
+      q16: ['Teve dificuldade para dormir ou dormiu mal?', FREQ],
+      q17: ['Pensou que seria melhor estar morta ou pensou em se machucar de alguma forma?', FREQ],
+      q18: ['Você faz ou já fez acompanhamento com psicólogo ou psiquiatra, ou toma remédio para ansiedade, depressão ou para dormir?', [['faz', 'Sim, faço acompanhamento hoje'], ['parou', 'Já fiz, mas parei'], ['nunca_precisa', 'Nunca fiz, mas sinto que preciso'], ['nunca_nao_precisa', 'Nunca fiz e não sinto necessidade']]],
+      q19: ['Como está a sua fé neste momento?', [['fortalece_muito', 'Minha fé me fortalece muito'], ['fortalece_pouco', 'Me fortalece um pouco'], ['crise', 'Estou afastada ou em crise com Deus'], ['sem_religiao', 'Não tenho religião']]],
+      q20: ['Em quais áreas você mais quer ajuda? Marque quantas quiser.', [['aprender_autismo', 'Aprender sobre autismo'], ['crises', 'Lidar com crises e comportamento'], ['saude_emocional', 'Cuidar da minha saúde emocional'], ['direitos', 'Direitos e benefícios (BPC, escola)'], ['espiritual', 'Apoio espiritual e oração'], ['renda', 'Renda e trabalho'], ['outras_maes', 'Conversar com outras mães']], true]
+    };
+    var ESTADO_CIVIL = [['solteira', 'Solteira'], ['casada', 'Casada'], ['uniao_estavel', 'União estável'], ['divorciada', 'Divorciada'], ['viuva', 'Viúva'], ['outro', 'Outro']];
+    var BENEFICIOS = [['bpc', 'BPC/LOAS'], ['bolsa_familia', 'Bolsa Família'], ['outro', 'Outro benefício'], ['nenhum', 'Nenhum']];
+
+    var $ = function (id) { return document.getElementById(id); };
+    var form = $('triagem');
+
+    // Monta um grupo de opções (cartões de tocar)
+    function grupo(id, titulo, opcoes, multipla, numero, obrigatorio) {
+      var fs = document.createElement('fieldset');
+      fs.className = 'opcoes'; fs.id = 'g-' + id;
+      var lg = document.createElement('legend');
+      if (numero) { var n = document.createElement('span'); n.className = 'num'; n.textContent = numero; lg.appendChild(n); }
+      lg.appendChild(document.createTextNode(titulo));
+      if (obrigatorio) { var o = document.createElement('span'); o.className = 'obrig'; o.setAttribute('aria-hidden', 'true'); o.textContent = '*'; lg.appendChild(o); }
+      fs.appendChild(lg);
+      opcoes.forEach(function (op) {
+        var l = document.createElement('label'); l.className = 'opcao';
+        var i = document.createElement('input'); i.type = multipla ? 'checkbox' : 'radio'; i.name = id; i.value = op[0];
+        var s = document.createElement('span'); s.textContent = op[1];
+        l.appendChild(i); l.appendChild(s); fs.appendChild(l);
+      });
+      return fs;
+    }
+    document.querySelectorAll('[data-perguntas]').forEach(function (caixa) {
+      caixa.getAttribute('data-perguntas').split(' ').forEach(function (q) {
+        var p = PERGUNTAS[q];
+        caixa.appendChild(grupo(q, p[0], p[1], !!p[2], q.slice(1), !p[2]));
+      });
+    });
+    $('g-civil').replaceWith(grupo('estado_civil', 'Estado civil', ESTADO_CIVIL, false, null, true));
+    $('g-beneficios').replaceWith(grupo('beneficios', 'Recebe algum benefício?', BENEFICIOS, true, null, false));
+
+    var etapas = Array.prototype.slice.call(form.querySelectorAll('.etapa'));
+    var prog = $('progresso');
+    etapas.forEach(function () { prog.appendChild(document.createElement('span')); });
+    var barras = prog.querySelectorAll('span');
+    $('total-etapas').textContent = etapas.length;
+    var btnProx = $('proximo'), btnVoltar = $('voltar'), erroEnvio = $('erro-envio');
+    var atual = 0, filhos = 1;
+    var marcado = function (nome) { var e = form.querySelector('input[name="' + nome + '"]:checked'); return e ? e.value : null; };
+    var marcados = function (nome) { return Array.prototype.map.call(form.querySelectorAll('input[name="' + nome + '"]:checked'), function (c) { return c.value; }); };
+    var texto = function (id) { var v = $(id).value.trim().replace(/\s+/g, ' '); return v || null; };
+
+    // Idade pela data de nascimento
+    var hoje = new Date();
+    $('f-nasc').max = hoje.toISOString().slice(0, 10);
+    function idade() {
+      var v = $('f-nasc').value; if (!v) return null;
+      var n = new Date(v + 'T12:00:00'); var i = hoje.getFullYear() - n.getFullYear();
+      var m = hoje.getMonth() - n.getMonth();
+      if (m < 0 || (m === 0 && hoje.getDate() < n.getDate())) i--;
+      return i >= 10 && i <= 120 ? i : null;
+    }
+    $('f-nasc').addEventListener('input', function () {
+      var i = idade(); $('idade').hidden = i === null; $('idade').textContent = i === null ? '' : i + ' anos';
+    });
+
+    function poeFilhos(n) { filhos = Math.max(0, Math.min(30, n)); $('filhos').textContent = filhos; }
+    $('filhos-menos').addEventListener('click', function () { poeFilhos(filhos - 1); });
+    $('filhos-mais').addEventListener('click', function () { poeFilhos(filhos + 1); });
+
+    $('f-zap').addEventListener('input', function () {
+      var d = this.value.replace(/\D/g, '').replace(/^55(?=\d{10,11}$)/, '').slice(0, 11);
+      this.value = d.length > 10 ? d.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3')
+        : d.length > 6 ? d.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3')
+        : d.length > 2 ? d.replace(/^(\d{2})(\d*)/, '($1) $2') : (d ? '(' + d : '');
+    });
+
+    // "Nenhum" benefício desmarca os outros (e vice-versa)
+    form.querySelectorAll('input[name="beneficios"]').forEach(function (c) {
+      c.addEventListener('change', function () {
+        if (!c.checked) return;
+        form.querySelectorAll('input[name="beneficios"]').forEach(function (o) {
+          if (o !== c && (c.value === 'nenhum' || o.value === 'nenhum')) o.checked = false;
+        });
+      });
+    });
+    // Pergunta 17: mensagem de apoio na hora
+    form.querySelectorAll('input[name="q17"]').forEach(function (r) {
+      r.addEventListener('change', function () { $('apoio-risco').hidden = marcado('q17') === 'nenhum'; });
+    });
+    // Pergunta 18: campo dos remédios
+    form.querySelectorAll('input[name="q18"]').forEach(function (r) {
+      r.addEventListener('change', function () { var v = marcado('q18'); $('c-medicacoes').hidden = !(v === 'faz' || v === 'parou'); });
+    });
+
+    // Validação por etapa
+    function limpaErros(sec) {
+      sec.querySelectorAll('.erro-campo').forEach(function (e) { e.remove(); });
+      sec.querySelectorAll('[aria-invalid]').forEach(function (e) { e.removeAttribute('aria-invalid'); });
+    }
+    function erro(alvo, msg) {
+      var p = document.createElement('p'); p.className = 'erro-campo'; p.textContent = msg;
+      var caixa = alvo.matches('fieldset') ? alvo : (alvo.closest('.campo, .aviso') || alvo);
+      caixa.appendChild(p);
+      if (alvo.matches('input, textarea')) alvo.setAttribute('aria-invalid', 'true');
+      return alvo;
+    }
+    function valida(i) {
+      var sec = etapas[i], primeiro = null, f = function (el) { if (!primeiro) primeiro = el; };
+      limpaErros(sec);
+      if (i === 0) {
+        if (!$('f-consent').checked) f(erro($('f-consent'), 'Marque esta autorização para continuar.'));
+        if (!$('f-consent-saude').checked) f(erro($('f-consent-saude'), 'Marque esta autorização para continuar.'));
+      }
+      if (i === 1) {
+        var nome = texto('f-nome') || '';
+        if (nome.length < 3 || nome.indexOf(' ') < 0) f(erro($('f-nome'), 'Escreva seu nome completo (nome e sobrenome).'));
+        if (idade() === null) f(erro($('f-nasc'), 'Informe sua data de nascimento.'));
+        var zap = $('f-zap').value.replace(/\D/g, '');
+        if (zap.length < 10 || zap.length > 11) f(erro($('f-zap'), 'Confira o WhatsApp com DDD, ex.: (16) 99999-9999.'));
+        var em = texto('f-email');
+        if (em && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) f(erro($('f-email'), 'Confira o e-mail, ex.: voce@email.com.'));
+        if (!texto('f-cidade')) f(erro($('f-cidade'), 'Informe sua cidade.'));
+        if (!marcado('estado_civil')) f(erro($('g-estado_civil'), 'Escolha uma opção.'));
+      }
+      if (i === 2) {
+        var fi = $('f-filho-idade').value;
+        if (fi === '' || +fi < 0 || +fi > 80 || Math.floor(+fi) !== +fi) f(erro($('f-filho-idade'), 'Informe a idade em anos (ex.: 6).'));
+      }
+      sec.querySelectorAll('[data-perguntas]').forEach(function (c) {
+        c.getAttribute('data-perguntas').split(' ').forEach(function (q) {
+          if (!PERGUNTAS[q][2] && !marcado(q)) f(erro($('g-' + q), 'Escolha uma opção.'));
+        });
+      });
+      if (primeiro) {
+        var alvo = primeiro.matches('input, textarea') ? primeiro : primeiro.querySelector('input') || primeiro;
+        alvo.focus(); alvo.scrollIntoView({ block: 'center' });
+      }
+      return !primeiro;
+    }
+
+    function dados() {
+      var r = {};
+      Object.keys(PERGUNTAS).forEach(function (q) { r[q] = PERGUNTAS[q][2] ? marcados(q) : marcado(q); });
+      var med = marcado('q18');
+      return {
+        nome: texto('f-nome'), como_chamar: texto('f-chamar'), data_nascimento: $('f-nasc').value, idade: idade(),
+        whatsapp: '55' + $('f-zap').value.replace(/\D/g, ''), email: texto('f-email') ? texto('f-email').toLowerCase() : null,
+        cidade: texto('f-cidade'), bairro: texto('f-bairro'), estado_civil: marcado('estado_civil'), filhos: filhos,
+        beneficios: marcados('beneficios'), religiao: texto('f-religiao'), igreja: texto('f-igreja'),
+        filho_nome: texto('f-filho-nome'), filho_idade: parseInt($('f-filho-idade').value, 10),
+        respostas: r, medicacoes: (med === 'faz' || med === 'parou') ? texto('f-medicacoes') : null,
+        relato: $('f-relato').value.trim() || null,
+        consentimento: true, consentimento_saude: true, origem: 'pagina', site: $('f-site').value || undefined
+      };
+    }
+
+    function montaResumo() {
+      var d = dados(), rot = function (lista, v) { var o = lista.filter(function (x) { return x[0] === v; })[0]; return o ? o[1] : v; };
+      var linhas = [
+        ['Nome', d.nome], ['Como gosta de ser chamada', d.como_chamar],
+        ['Nascimento', d.data_nascimento.split('-').reverse().join('/') + (d.idade !== null ? ' (' + d.idade + ' anos)' : '')],
+        ['WhatsApp', $('f-zap').value], ['E-mail', d.email], ['Cidade', [d.cidade, d.bairro].filter(Boolean).join(' · ')],
+        ['Estado civil', rot(ESTADO_CIVIL, d.estado_civil)], ['Filhos', String(d.filhos)],
+        ['Filho(a) com autismo', [d.filho_nome, d.filho_idade + ' anos'].filter(Boolean).join(', ')],
+        ['20 perguntas', 'Respondidas (sigiloso)']
+      ];
+      var ul = $('resumo'); ul.innerHTML = '';
+      linhas.forEach(function (l) {
+        var li = document.createElement('li'), a = document.createElement('span'), b = document.createElement('span');
+        a.textContent = l[0]; b.textContent = l[1] || '—'; li.appendChild(a); li.appendChild(b); ul.appendChild(li);
+      });
+    }
+
+    function vaiPara(i) {
+      etapas[atual].hidden = true; atual = i; etapas[atual].hidden = false;
+      barras.forEach(function (b, k) { b.classList.toggle('feito', k <= atual); });
+      $('num-etapa').textContent = atual + 1; $('nome-etapa').textContent = etapas[atual].dataset.nome;
+      btnVoltar.hidden = atual === 0;
+      btnProx.textContent = atual === 0 ? 'Começar →' : atual === etapas.length - 1 ? 'Enviar triagem' : 'Próximo →';
+      erroEnvio.hidden = true;
+      if (atual === etapas.length - 1) montaResumo();
+      window.scrollTo({ top: 0 });
+      etapas[atual].querySelector('h2').focus({ preventScroll: true });
+    }
+    btnVoltar.addEventListener('click', function () { if (atual > 0) vaiPara(atual - 1); });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!valida(atual)) return;
+      if (atual < etapas.length - 1) { vaiPara(atual + 1); return; }
+      var d = dados();
+      btnProx.disabled = true; btnProx.textContent = 'Enviando…';
+      fetch(URL_TRIAGEM, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
+        .then(function (r) { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
+        .then(function (res) {
+          form.hidden = true; $('cabecalho-etapas').hidden = true;
+          $('sucesso-nome').textContent = d.como_chamar || d.nome.split(' ')[0];
+          $('protocolo').textContent = res.protocolo;
+          $('sucesso-risco').hidden = d.respostas.q17 === 'nenhum';
+          $('sucesso').hidden = false; window.scrollTo({ top: 0 }); $('sucesso-titulo').focus();
+        })
+        .catch(function () {
+          erroEnvio.textContent = 'Não conseguimos enviar sua triagem agora. Confira sua internet e toque em "Enviar triagem" de novo. Suas respostas continuam aqui.';
+          erroEnvio.hidden = false;
+          btnProx.disabled = false; btnProx.textContent = 'Enviar triagem';
+        });
+    });
+
+    vaiPara(0);
+    window.scrollTo({ top: 0 });
+  })();
+  </script>
+</body>
+</html>
