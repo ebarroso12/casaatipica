@@ -323,7 +323,7 @@
   (function () {
     'use strict';
     // Envia para a função `triagem` do Supabase (projeto crmclinica). Ela recalcula a pontuação,
-    // grava em casaatipica_triagens e gera o parecer da IA para a equipe. A mãe só recebe o protocolo.
+    // grava em casa_atipica.triagem (a mãe entra na fila de espera) e faz o resumo para a equipe. A mãe só recebe o protocolo.
     var URL_TRIAGEM = 'https://umvpwqqjzpxwuxdnnxzy.supabase.co/functions/v1/triagem';
 
     // As 20 perguntas. Os valores (value) são os mesmos de supabase/functions/triagem/pontuacao.js.
