@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Triagem de acolhimento · Casa Atípica</title>
   <meta name="description" content="Triagem de acolhimento da Casa Atípica para mães de filhos com autismo. Gratuita, sigilosa, 20 perguntas.">
-  <meta name="theme-color" content="#0b2a33">
+  <meta name="theme-color" content="#173b27">
   <meta name="robots" content="noindex">
   <link rel="icon" href="../favicon.ico" sizes="any">
   <link rel="icon" type="image/svg+xml" href="../icons/favicon.svg">
@@ -20,18 +20,18 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Montserrat:wght@400;500;600;700&display=swap">
   <style>
     /* Formulário no estilo Jotform (modelo Impacto Rosa): fundo claro, cartão branco, etapas com
-       progresso, nas cores da Casa Atípica (azul-petróleo, turquesa e girassol). */
+       progresso, nas cores da Casa Atípica (verde da logo, branco e dourado). */
     :root {
       color-scheme: light;
-      --fundo: #eef6f7;
+      --fundo: #eef5f0;
       --cartao: #ffffff;
-      --texto: #14262b;
-      --suave: #52696f;
-      --linha: #d3e4e7;
-      --escuro: #0b2a33;
-      --marca: #1f8a9b;
-      --marca-claro: #e3f4f6;
-      --girassol: #c98a06;
+      --texto: #15261b;
+      --suave: #52695a;
+      --linha: #d4e5da;
+      --escuro: #173b27;
+      --marca: #2f7d50;
+      --marca-claro: #e3f3e8;
+      --girassol: #b8860b;
       --erro: #c0263c;
       --ok: #1f9d55;
       --display: "Cormorant Garamond", Georgia, serif;
@@ -46,18 +46,18 @@
     [tabindex="-1"]:focus { outline: none; }
 
     .topo {
-      background: radial-gradient(ellipse at 50% 0%, rgba(95, 208, 220, .3), transparent 60%), linear-gradient(160deg, #071419, var(--escuro));
+      background: radial-gradient(ellipse at 50% 0%, rgba(120, 200, 150, .28), transparent 60%), linear-gradient(160deg, #07130c, var(--escuro));
       color: #fff; text-align: center;
       padding: calc(36px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 84px max(16px, env(safe-area-inset-left, 0px));
     }
-    .topo img { width: 64px; margin: 0 auto 10px; }
-    .topo .rotulo { margin: 0; font-size: .72rem; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: #f6b93b; }
+    .topo img { width: 88px; margin: 0 auto 10px; }
+    .topo .rotulo { margin: 0; font-size: .72rem; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: #e9bd55; }
     .topo h1 { margin: 6px 0 6px; font-family: var(--display); font-weight: 600; font-size: clamp(2.1rem, 7vw, 3rem); line-height: 1.05; }
-    .topo h1 em { color: #7fd8e2; }
-    .topo p { margin: 0; color: #d5ecef; font-size: .95rem; }
+    .topo h1 em { color: #9fd9b5; }
+    .topo p { margin: 0; color: #d9eee0; font-size: .95rem; }
 
     .area { max-width: 720px; margin: -56px auto 0; padding: 0 max(16px, env(safe-area-inset-right, 0px)) 48px max(16px, env(safe-area-inset-left, 0px)); }
-    .cartao { background: var(--cartao); border-radius: 18px; box-shadow: 0 20px 50px rgba(11, 42, 51, .14); padding: clamp(20px, 5vw, 40px); }
+    .cartao { background: var(--cartao); border-radius: 18px; box-shadow: 0 20px 50px rgba(23, 59, 39, .14); padding: clamp(20px, 5vw, 40px); }
 
     .progresso { display: flex; gap: 6px; margin-bottom: 8px; }
     .progresso span { flex: 1; height: 6px; border-radius: 99px; background: var(--linha); transition: background .3s; }
@@ -78,7 +78,7 @@
       background: #fff; color: var(--texto); font: inherit; font-size: 16px; transition: border-color .15s, box-shadow .15s;
     }
     textarea { min-height: 120px; resize: vertical; }
-    input:focus, textarea:focus { outline: none; border-color: var(--marca); box-shadow: 0 0 0 4px rgba(31, 138, 155, .14); }
+    input:focus, textarea:focus { outline: none; border-color: var(--marca); box-shadow: 0 0 0 4px rgba(47, 125, 80, .14); }
     [aria-invalid="true"] { border-color: var(--erro) !important; }
     .erro-campo { color: var(--erro); font-size: .82rem; margin: 6px 0 0; }
     .idade { display: inline-flex; margin-top: 8px; padding: 4px 12px; border-radius: 99px; background: var(--marca-claro); color: var(--escuro); font-weight: 600; font-size: .85rem; }
@@ -94,7 +94,7 @@
       display: flex; align-items: center; gap: 10px; min-height: 52px; height: 100%; padding: 12px 14px; border: 1.5px solid var(--linha);
       border-radius: 10px; background: #fff; font-size: .92rem; font-weight: 500; transition: border-color .15s, background .15s;
     }
-    .opcao span::before { content: ""; flex: none; width: 18px; height: 18px; border: 2px solid #a9c3c8; border-radius: 50%; background: #fff; }
+    .opcao span::before { content: ""; flex: none; width: 18px; height: 18px; border: 2px solid #a9c8b4; border-radius: 50%; background: #fff; }
     .opcao input[type="checkbox"] + span::before { border-radius: 5px; }
     .opcao input:checked + span { border-color: var(--marca); background: var(--marca-claro); color: var(--escuro); font-weight: 600; }
     .opcao input:checked + span::before { border-color: var(--marca); background: var(--marca); box-shadow: inset 0 0 0 3px #fff; }
@@ -123,7 +123,7 @@
       border-radius: 10px; border: 0; font: inherit; font-weight: 700; font-size: .95rem; cursor: pointer; text-decoration: none;
     }
     .btn-prox { background: var(--marca); color: #fff; margin-left: auto; }
-    .btn-prox:hover { background: #17707e; }
+    .btn-prox:hover { background: #215f3b; }
     .btn-voltar { background: transparent; color: var(--suave); border: 1.5px solid var(--linha); }
     .btn[disabled] { opacity: .7; cursor: wait; }
     .erro-envio { color: var(--erro); font-size: .9rem; margin: 10px 0 0; }
@@ -146,8 +146,8 @@
 </head>
 <body>
   <header class="topo">
-    <img src="../icons/favicon.svg" width="64" height="40" alt="">
-    <p class="rotulo">Casa Atípica · Acolhimento</p>
+    <img src="../assets/img/logo-emblema.svg" width="88" height="80" alt="">
+    <p class="rotulo">Casa Atípica · Rede de apoio à família atípica</p>
     <h1>Triagem de <em>acolhimento</em></h1>
     <p>20 perguntas simples · uns 8 minutos · gratuita e sigilosa</p>
   </header>
