@@ -21,7 +21,7 @@ from urllib.parse import quote
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
-URL_PADRAO = "https://ebarroso12.github.io/casaatipica/"
+URL_PADRAO = "https://casaatipica.mentorawaniaarantes.com.br/"
 
 # WhatsApp da equipe: só dígitos com 55 + DDD (ex.: "5516999999999"). Vazio = ainda não informado:
 # os botões abrem o WhatsApp para a pessoa escolher o contato.

@@ -12,8 +12,9 @@ Fale com o usuário em português do Brasil, linguagem de leigo.
 - **Cores:** azul-petróleo `#071419`, turquesa `#7fd8e2`/`#1f9fb2`, girassol `#f6b93b`.
 
 ## Endereços
-- Página: https://ebarroso12.github.io/casaatipica/ (depois que o GitHub Pages for ativado)
-- Triagem: https://ebarroso12.github.io/casaatipica/triagem/ (QR em `assets/img/qr-triagem.png`)
+- Página: https://casaatipica.mentorawaniaarantes.com.br/ (GitHub Pages pela `main`; arquivo `CNAME` na raiz; DNS = CNAME `casaatipica` → `ebarroso12.github.io` na Hostinger). Endereço provisório antigo: https://ebarroso12.github.io/casaatipica/ (agora redireciona)
+- Triagem: https://casaatipica.mentorawaniaarantes.com.br/triagem/ (QR em `assets/img/qr-triagem.png`)
+- Painel admin (onde se gerencia o formulário): https://www.mentorawaniaarantes.com.br/admin
 - Prévia no Claude: https://claude.ai/artifact/S1qoHmerYU6P5nRNpMrdG6 (lá a triagem não envia; abra pelo endereço real)
 
 ## Triagem (o formulário das mães)
